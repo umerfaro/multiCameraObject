@@ -1,0 +1,10 @@
+opencv-python
+torch
+torchvision
+torchaudio
+torchreid
+scipy
+numpy
+ultralytics
+fastapi
+uvicorn
