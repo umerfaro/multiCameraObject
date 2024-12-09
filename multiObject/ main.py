@@ -1,3 +1,5 @@
+
+
 import argparse
 from config import TrackingConfig
 from frame_reader import FrameReader
@@ -25,11 +27,32 @@ def main():
     queue1 = Queue(maxsize=20)
     queue2 = Queue(maxsize=20)
 
+    # Validate input videos
+    import os
+    if not os.path.exists(args.video1):
+        raise FileNotFoundError(f"video1 not found at {args.video1}")
+    if not os.path.exists(args.video2):
+        raise FileNotFoundError(f"video2 not found at {args.video2}")
+
     reader1 = FrameReader(args.video1, queue1, name='Camera1')
     reader2 = FrameReader(args.video2, queue2, name='Camera2')
 
-    tracker = MultiCameraTracker(config)
-    tracker.process_videos(reader1, reader2, args.output)
+    try:
+        tracker = MultiCameraTracker(config)
+    except Exception as e:
+        print(f"Failed to initialize tracker: {e}")
+        return
+
+    try:
+        tracker.process_videos(reader1, reader2, args.output)
+    except Exception as e:
+        print(f"Error during video processing: {e}")
+    finally:
+        # Ensure resources are released
+        reader1.stop()
+        reader2.stop()
+
 
 if __name__ == "__main__":
     main()
+

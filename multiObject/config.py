@@ -16,3 +16,4 @@ class TrackingConfig:
     batch_size: int = 128  # Larger batch size for GPU utilization
     max_feature_distance: float = 0.7
     reid_keep_frames: int = 30  # Number of frames to keep ReID features
+
